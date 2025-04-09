@@ -79,43 +79,52 @@ class Tic_Tac_Toe():
                                 grid_position[0] + symbol_size, grid_position[1] - symbol_size, width=symbol_thickness,
                                 fill=symbol_X_color)
 
-    def display_gameover(self):
+        def display_gameover(self):
+        # Highlight winning line if there's a winner
+            if self.X_wins:
+                self.X_score += 1
+                text = 'Winner: Player 1 (X)'
+                color = symbol_X_color
+                winning_line = self.is_winner('X')  # Get winning line
+            elif self.O_wins:
+                self.O_score += 1
+                text = 'Winner: Player 2 (O)'
+                color = symbol_O_color
+                winning_line = self.is_winner('O')  # Get winning line
+            else:
+                self.tie_score += 1
+                text = 'It\'s a tie'
+                color = 'gray'
+                winning_line = None
 
-        if self.X_wins:
-            self.X_score += 1
-            text = 'Winner: Player 1 (X)'
-            color = symbol_X_color
-        elif self.O_wins:
-            self.O_score += 1
-            text = 'Winner: Player 2 (O)'
-            color = symbol_O_color
-        else:
-            self.tie_score += 1
-            text = 'Its a tie'
-            color = 'gray'
+            self.canvas.delete("all")
+            if winning_line:
+                self.highlight_winning_line(winning_line, color)
 
-        self.canvas.delete("all")
-        self.canvas.create_text(size_of_board / 2, size_of_board / 3, font="cmr 60 bold", fill=color, text=text)
+            self.canvas.create_text(size_of_board / 2, size_of_board / 3, font="cmr 60 bold", fill=color, text=text)
 
-        score_text = 'Scores \n'
-        self.canvas.create_text(size_of_board / 2, 5 * size_of_board / 8, font="cmr 40 bold", fill=Green_color,
-                                text=score_text)
+            score_text = 'Scores \n'
+            self.canvas.create_text(size_of_board / 2, 5 * size_of_board / 8, font="cmr 40 bold", fill=Green_color,
+                                    text=score_text)
 
-        score_text = 'Player 1 (X) : ' + str(self.X_score) + '\n'
-        score_text += 'Player 2 (O): ' + str(self.O_score) + '\n'
-        score_text += 'Tie                    : ' + str(self.tie_score)
-        self.canvas.create_text(size_of_board / 2, 3 * size_of_board / 4, font="cmr 30 bold", fill=Green_color,
-                                text=score_text)
-        self.reset_board = True
+            score_text = f'Player 1 (X): {self.X_score}\n'
+            score_text += f'Player 2 (O): {self.O_score}\n'
+            score_text += f'Tie: {self.tie_score}'
+            self.canvas.create_text(size_of_board / 2, 3 * size_of_board / 4, font="cmr 30 bold", fill=Green_color,
+                                    text=score_text)
+            self.reset_board = True
 
-        score_text = 'Click to play again \n'
-        self.canvas.create_text(size_of_board / 2, 15 * size_of_board / 16, font="cmr 20 bold", fill="gray",
-                                text=score_text)
+            score_text = 'Click to play again \n'
+            self.canvas.create_text(size_of_board / 2, 15 * size_of_board / 16, font="cmr 20 bold", fill="gray",
+                                    text=score_text)
 
-    # ------------------------------------------------------------------
-    # Logical Functions:
-    # The modules required to carry out game logic
-    # ------------------------------------------------------------------
+    def highlight_winning_line(self, winning_line, color):
+        start_pos = self.convert_logical_to_grid_position(winning_line[0])
+        end_pos = self.convert_logical_to_grid_position(winning_line[2])
+        self.canvas.create_line(start_pos[0], start_pos[1], end_pos[0], end_pos[1],
+                                width=symbol_thickness / 2, fill=color)
+
+
 
     def convert_logical_to_grid_position(self, logical_position):
         logical_position = np.array(logical_position, dtype=int)
