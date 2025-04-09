@@ -137,9 +137,9 @@ class Tic_Tac_Toe():
 
         # Three in a row
         for i in range(3):
-            if self.board_status[i][0] == self.board_status[i][1] == self.board_status[i][2] == player:
+            if self.board_status[i][0] == self.board_status[i][1] ==  player:
                 return True
-            if self.board_status[0][i] == self.board_status[1][i] == self.board_status[2][i] == player:
+            if self.board_status[0][i] == self.board_status[1][i] ==  player:
                 return True
 
         # Diagonals
